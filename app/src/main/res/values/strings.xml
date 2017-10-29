@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Asteriodes</string>
+    <string name="tituloAplicacion">Asteriodes</string>
+    <string name="Arrancar">Jugar</string>
+    <string name="Configurar">Configuración</string>
+    <string name="Acercade">Acerca de...</string>
+    <string name="Salir">Salir</string>
+</resources>
