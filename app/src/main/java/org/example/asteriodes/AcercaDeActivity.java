@@ -13,4 +13,18 @@ public class AcercaDeActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acercade);
     }
+
+    /**
+     * Created by Julio on 01/11/2017.
+     */
+
+    public static class PreferenciasActivity extends Activity {
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            getFragmentManager().beginTransaction()
+                    .replace(android.R.id.content, new PreferenciasFragment())
+                    .commit();
+        }
+    }
 }
