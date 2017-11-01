@@ -34,7 +34,7 @@
         <ListPreference
             android:key="conexion"
             android:title="Tipo de conexión"
-            android:summary="Se escoge el tipo de conexión con el que se desa conectar con los otros jugadores"
+            android:summary="Se escoge el tipo de conexión con el que se desea conectar con los otros jugadores"
             android:entries="@array/tiposConexion"
             android:entryValues="@array/tiposConexionValores"
             android:defaultValue="1"/>
