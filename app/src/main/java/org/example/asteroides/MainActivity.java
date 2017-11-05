@@ -10,23 +10,42 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private Button bAcercaDe;
     private Button bSalir;
+    private Button bJugar;
+    private Button bConfiguracion;
     public static AlmacenPuntuaciones almacen = new AlmacenPuntuacionesArray();
+    private TextView titulo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        titulo = (TextView) findViewById(R.id.tvTitulo);
+        final Animation giro = AnimationUtils.loadAnimation(this,R.anim.giro_con_zoom);
+        titulo.startAnimation(giro);
+
+        bJugar = (Button) findViewById(R.id.button01);
+        Animation aparicion = AnimationUtils.loadAnimation(this,R.anim.aparecer);
+        bJugar.startAnimation(aparicion);
+
+        bJugar = (Button) findViewById(R.id.button02);
+        Animation desplazamiento = AnimationUtils.loadAnimation(this,R.anim.desplazamiento_derecha);
+        bJugar.startAnimation(desplazamiento);
+
         bAcercaDe = (Button) findViewById(R.id.button03);
         bAcercaDe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(giro);
                 lanzarAcercaDe(null);
             }
         });
