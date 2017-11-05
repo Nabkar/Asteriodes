@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.example.asteriodes">
+    package="org.example.asteroides">
 
     <application
         android:allowBackup="true"
@@ -22,6 +22,7 @@
         </activity>
         <activity android:name=".PreferenciasActivity"/>
         <activity android:name=".Puntuaciones"/>
+        <activity android:name=".Juego"/>
     </application>
 
 </manifest>

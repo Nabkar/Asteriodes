@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Asteriodes</string>
-    <string name="tituloAplicacion">Asteriodes</string>
+    <string name="app_name">Asteroides</string>
+    <string name="tituloAplicacion">Asteroides</string>
     <string name="Arrancar">Jugar</string>
     <string name="Configurar">Configuración</string>
     <string name="Acercade">Acerca de...</string>

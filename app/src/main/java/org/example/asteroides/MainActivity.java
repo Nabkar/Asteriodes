@@ -1,4 +1,4 @@
-package org.example.asteriodes;
+package org.example.asteroides;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -84,6 +84,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void lanzarPuntuaciones(View view){
         Intent i = new Intent(this, Puntuaciones.class);
+        startActivity(i);
+    }
+
+    public void lanzarJuego(View view){
+        Intent i = new Intent(this, Juego.class);
         startActivity(i);
     }
 

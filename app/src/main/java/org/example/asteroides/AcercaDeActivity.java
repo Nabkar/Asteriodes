@@ -1,7 +1,9 @@
-package org.example.asteriodes;
+package org.example.asteroides;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import org.example.asteroides.R;
 
 /**
  * Created by Julio on 30/10/2017.

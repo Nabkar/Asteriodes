@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:padding="@dimen/margen_botones"
+    android:background="@drawable/degradado"
     tools:context=".MainActivity" >
 
     <TextView
@@ -24,7 +25,8 @@
             <Button android:id="@+id/button01"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="@string/Arrancar"/>
+                android:text="@string/Arrancar"
+                android:onClick="lanzarJuego"/>
             <Button android:id="@+id/button02"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"

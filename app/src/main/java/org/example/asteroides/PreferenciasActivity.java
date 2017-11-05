@@ -1,4 +1,4 @@
-package org.example.asteriodes;
+package org.example.asteroides;
 
 import android.app.Activity;
 import android.os.Bundle;
