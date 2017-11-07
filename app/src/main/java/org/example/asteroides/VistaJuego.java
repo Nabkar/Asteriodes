@@ -17,10 +17,6 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Julio on 05/11/2017.
- */
-
 public class VistaJuego extends View {
     // //// ASTEROIDES //////
     private List<Grafico> asteroides; // Lista con los Asteroides
@@ -35,6 +31,14 @@ public class VistaJuego extends View {
     // Incremento estándar de giro y aceleración
     private static final int PASO_GIRO_NAVE = 5;
     private static final float PASO_ACELERACION_NAVE = 0.5f;
+
+    // //// THREAD Y TIEMPO //////
+    // Thread encargado de procesar el juego
+    private ThreadJuego thread = new ThreadJuego();
+    // Cada cuanto queremos procesar cambios (ms)
+    private static int PERIODO_PROCESO = 50;
+    // Cuando se realizó el último proceso
+    private long ultimoProceso = 0;
 
     public VistaJuego(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -87,8 +91,9 @@ public class VistaJuego extends View {
         ContextCompat.getDrawable(context, R.drawable.nave);
         nave = new Grafico(this, drawableNave);
     }
-    @Override protected void onSizeChanged(int ancho, int alto,
-                                           int ancho_anter, int alto_anter) {
+
+    @Override
+    protected void onSizeChanged(int ancho, int alto, int ancho_anter, int alto_anter) {
         super.onSizeChanged(ancho, alto, ancho_anter, alto_anter);
         // Una vez que conocemos nuestro ancho y alto.
         nave.setCenX(ancho/2);
@@ -100,12 +105,53 @@ public class VistaJuego extends View {
                 asteroide.setCenY((int) (Math.random()*alto));
             } while(asteroide.distancia(nave) < (ancho+alto)/5);
         }
+
+        ultimoProceso = System.currentTimeMillis();
+        thread.start();
     }
-    @Override protected void onDraw(Canvas canvas) {
+
+    @Override
+    synchronized protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         for (Grafico asteroide: asteroides) {
             asteroide.dibujaGrafico(canvas);
         }
         nave.dibujaGrafico(canvas);
     }
+
+    synchronized protected void actualizaFisica() {
+        long ahora = System.currentTimeMillis();
+        if (ultimoProceso + PERIODO_PROCESO > ahora) {
+            return; // Salir si el período de proceso no se ha cumplido.
+        }
+        // Para una ejecución en tiempo real calculamos el factor de movimiento
+        double factorMov = (ahora - ultimoProceso) / PERIODO_PROCESO;
+        ultimoProceso = ahora; // Para la próxima vez
+        // Actualizamos velocidad y dirección de la nave a partir de
+        // giroNave y aceleracionNave (según la entrada del jugador)
+        nave.setAngulo((int) (nave.getAngulo() + giroNave * factorMov));
+        double nIncX = nave.getIncX() + aceleracionNave *
+                Math.cos(Math.toRadians(nave.getAngulo())) * factorMov;
+        double nIncY = nave.getIncY() + aceleracionNave *
+                Math.sin(Math.toRadians(nave.getAngulo())) * factorMov;
+        // Actualizamos si el módulo de la velocidad no excede el máximo
+        if (Math.hypot(nIncX,nIncY) <= MAX_VELOCIDAD_NAVE){
+            nave.setIncX(nIncX);
+            nave.setIncY(nIncY);
+        }
+        nave.incrementaPos(factorMov); // Actualizamos posición
+        for (Grafico asteroide : asteroides) {
+            asteroide.incrementaPos(factorMov);
+        }
+    }
+
+    class ThreadJuego extends Thread {
+        @Override
+        public void run() {
+            while (true) {
+                actualizaFisica();
+            }
+        }
+    }
 }
+
