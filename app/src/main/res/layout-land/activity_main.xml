@@ -31,7 +31,8 @@
             <Button android:id="@+id/button02"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="@string/Configurar"/>
+                android:text="@string/Configurar"
+                android:onClick="lanzarPreferencias"/>
         </TableRow>
         <TableRow>
 

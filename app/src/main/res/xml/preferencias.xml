@@ -39,4 +39,22 @@
             android:entryValues="@array/tiposConexionValores"
             android:defaultValue="1"/>
     </PreferenceCategory>
+
+    <PreferenceCategory android:title="Controles">
+        <CheckBoxPreference
+            android:key="teclado"
+            android:title="Activar teclado"
+            android:summary="Activas la opción de jugar con el teclado"
+            android:defaultValue="false"/>
+        <!--<CheckBoxPreference
+            android:key="orientacion"
+            android:title="Activar orientación"
+            android:summary="Activas la opción de jugar con el sensor de orientación"
+            android:defaultValue="true"/>-->
+        <CheckBoxPreference
+            android:key="acelerometro"
+            android:title="Activar acelerometro"
+            android:summary="Activas la opción de la nave con el acelerometro"
+            android:defaultValue="true"/>
+    </PreferenceCategory>
 </PreferenceScreen>
