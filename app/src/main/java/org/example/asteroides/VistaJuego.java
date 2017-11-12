@@ -14,6 +14,9 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -58,6 +61,15 @@ public class VistaJuego extends View implements SensorEventListener {
 
     private boolean hayValorInicial = false;
     private float valorInicial;
+
+    private SensorManager mSensorManager;
+    private Sensor accSensor;
+
+    // //// MULTIMEDIA //////
+    SoundPool soundPool;
+    int idDisparo, idExplosion;
+    private boolean sonidos;
+
 
     public VistaJuego(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -125,7 +137,7 @@ public class VistaJuego extends View implements SensorEventListener {
         misil = new Grafico(this,drawableMisil);
 
         //Sensores
-        SensorManager mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        /*SensorManager */mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 
         /*if (pref.getBoolean("orientacion", true)==true) {
             List<Sensor> orientationSensors = mSensorManager.getSensorList(Sensor.TYPE_ORIENTATION);
@@ -138,9 +150,17 @@ public class VistaJuego extends View implements SensorEventListener {
         if (pref.getBoolean("acelerometro", true)==true) {
             List<Sensor> acceleratorsSensors = mSensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
             if (!acceleratorsSensors.isEmpty()) {
-                Sensor accSensor = acceleratorsSensors.get(0);
-                mSensorManager.registerListener(this, accSensor, SensorManager.SENSOR_DELAY_GAME);
+                accSensor = acceleratorsSensors.get(0);
+                //mSensorManager.registerListener(this, accSensor, SensorManager.SENSOR_DELAY_GAME);
             }
+        }
+
+        //Multimedia
+        soundPool = new SoundPool( 5, AudioManager.STREAM_MUSIC , 0);
+        idDisparo = soundPool.load(context, R.raw.disparo, 0);
+        idExplosion = soundPool.load(context, R.raw.explosion, 0);
+        if (pref.getBoolean("sonidos", true)==true) {
+            sonidos = true;
         }
     }
 
@@ -342,6 +362,9 @@ public class VistaJuego extends View implements SensorEventListener {
             misilActivo = false;
         }
         this.postInvalidate();
+        if(sonidos) {
+            soundPool.play(idExplosion, 1, 1, 0, 0, 1);
+        }
     }
 
     private void activaMisil() {
@@ -355,15 +378,59 @@ public class VistaJuego extends View implements SensorEventListener {
         tiempoMisil = (int) Math.min(this.getWidth() / Math.abs( misil.
                 getIncX()), this.getHeight() / Math.abs(misil.getIncY())) - 2;
         misilActivo = true;
+        if (sonidos) {
+            soundPool.play(idDisparo, 1, 1, 1, 0, 1);
+        }
+    }
+
+    public void activaSensores(){
+        mSensorManager.registerListener(this, accSensor, SensorManager.SENSOR_DELAY_GAME);
+    }
+
+    public void desactivaSensores() {
+        mSensorManager.unregisterListener(this);
+    }
+
+    public SoundPool getSoundPool() {
+        return soundPool;
+    }
+
+    public boolean isSonidos() {
+        return sonidos;
     }
 
     class ThreadJuego extends Thread {
+        private boolean pausa,corriendo;
+        public synchronized void pausar() {
+            pausa = true;
+        }
+        public synchronized void reanudar() {
+            pausa = false;
+            notify();
+        }
+        public void detener() {
+            corriendo = false;
+            if (pausa) reanudar();
+        }
         @Override
         public void run() {
-            while (true) {
+            corriendo = true;
+            while (corriendo) {
                 actualizaFisica();
+                synchronized (this) {
+                    while (pausa) {
+                        try {
+                            wait();
+                        } catch (Exception e) {
+                        }
+                    }
+                }
             }
         }
+    }
+
+    public ThreadJuego getThread() {
+        return thread;
     }
 }
 

@@ -19,6 +19,11 @@
         android:summary="En cuantos trozos se divide un asteroide"
         android:inputType="number"
         android:defaultValue="3"/>
+    <CheckBoxPreference
+        android:key="sonidos"
+        android:title="Activar sonidos"
+        android:summary="Activas la opción de reproducir sonidos"
+        android:defaultValue="true"/>
 
     <PreferenceCategory android:title="Modo Multijugador">
         <CheckBoxPreference

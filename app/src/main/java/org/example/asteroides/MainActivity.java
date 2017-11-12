@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 /*import android.preference.EditTextPreference;
 import android.preference.Preference;*/
+import android.media.MediaPlayer;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,10 @@ public class MainActivity extends AppCompatActivity {
     private Button bConfiguracion;
     public static AlmacenPuntuaciones almacen = new AlmacenPuntuacionesArray();
     private TextView titulo;
+
+    MediaPlayer mp;
+    private SharedPreferences pref;
+    private boolean sonidos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +93,82 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });*/
+
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
+        mp = MediaPlayer.create(this, R.raw.audio);
+        if (pref.getBoolean("sonidos", true)==true) {
+            sonidos = true;
+            mp.start();
+        } else {
+            sonidos = false;
+        }
+
+        //Toast.makeText(this,"onCreate",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle estadoGuardado){
+        super.onSaveInstanceState(estadoGuardado);
+        if (mp != null) {
+            int pos = mp.getCurrentPosition();
+            estadoGuardado.putInt("posicion", pos);
+        }
+    }
+    @Override
+    protected void onRestoreInstanceState(Bundle estadoGuardado){
+        super.onRestoreInstanceState(estadoGuardado);
+        if (estadoGuardado != null && mp != null) {
+            int pos = estadoGuardado.getInt("posicion");
+            if (pref.getBoolean("sonidos", true)==true) {
+                if (pos == 0) {
+                    mp.start();
+                } else {
+                    mp.seekTo(pos);
+                }
+            } else {
+                mp.stop();
+            }
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (pref.getBoolean("sonidos", true)==true) {
+            mp.start();
+        }
+        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    protected void onPause() {
+        Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
+        mp.pause();
+        super.onPause();
+    }
+    @Override
+    protected void onStop() {
+        Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
+        super.onStop();
+    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (pref.getBoolean("sonidos", true)==true) {
+            mp.start();
+        } else {
+            mp.stop();
+        }
+        Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    protected void onDestroy() {
+        Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
+        super.onDestroy();
     }
 
     public void lanzarAcercaDe(View view){
