@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     public static AlmacenPuntuaciones almacen = new AlmacenPuntuacionesArray();
     private TextView titulo;
 
-    MediaPlayer mp;
+    //MediaPlayer mp;
     private SharedPreferences pref;
     private boolean sonidos;
 
@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        startService(new Intent(MainActivity.this, ServicioMusica.class));
 
         titulo = (TextView) findViewById(R.id.tvTitulo);
         final Animation giro = AnimationUtils.loadAnimation(this,R.anim.giro_con_zoom);
@@ -95,10 +96,10 @@ public class MainActivity extends AppCompatActivity {
         });*/
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
-        mp = MediaPlayer.create(this, R.raw.audio);
+       // mp = MediaPlayer.create(this, R.raw.audio);
         if (pref.getBoolean("sonidos", true)==true) {
             sonidos = true;
-            mp.start();
+            //mp.start();
         } else {
             sonidos = false;
         }
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         //Toast.makeText(this,"onCreate",Toast.LENGTH_SHORT).show();
     }
 
-    @Override
+    /*@Override
     protected void onSaveInstanceState(Bundle estadoGuardado){
         super.onSaveInstanceState(estadoGuardado);
         if (mp != null) {
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 mp.stop();
             }
         }
-    }
+    }*/
 
     @Override
     protected void onStart() {
@@ -139,15 +140,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (pref.getBoolean("sonidos", true)==true) {
+        /*if (pref.getBoolean("sonidos", true)==true) {
             mp.start();
-        }
+        }*/
         Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
     }
     @Override
     protected void onPause() {
         Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
-        mp.pause();
+        //mp.pause();
         super.onPause();
     }
     @Override
@@ -158,16 +159,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        if (pref.getBoolean("sonidos", true)==true) {
+        /*if (pref.getBoolean("sonidos", true)==true) {
             mp.start();
         } else {
             mp.stop();
-        }
+        }*/
         Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
     }
     @Override
     protected void onDestroy() {
         Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
+        stopService(new Intent(MainActivity.this,
+                ServicioMusica.class));
         super.onDestroy();
     }
 
