@@ -25,7 +25,7 @@
         android:summary="Activas la opción de reproducir sonidos"
         android:defaultValue="true"/>
 
-    <PreferenceCategory android:title="Modo Multijugador">
+    <!--<PreferenceCategory android:title="Modo Multijugador">
         <CheckBoxPreference
             android:key="multijugador"
             android:title="Activar Multijugador"
@@ -43,7 +43,7 @@
             android:entries="@array/tiposConexion"
             android:entryValues="@array/tiposConexionValores"
             android:defaultValue="1"/>
-    </PreferenceCategory>
+    </PreferenceCategory>-->
 
     <PreferenceCategory android:title="Controles">
         <CheckBoxPreference
@@ -61,5 +61,15 @@
             android:title="Activar acelerometro"
             android:summary="Activas la opción de la nave con el acelerometro"
             android:defaultValue="true"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Tipo de almacenamiento">
+        <ListPreference
+            android:key="puntuaciones"
+            android:title="Tipo de almacenamiento de las puntuaciones"
+            android:summary="Elige la forma en la que almacenar las puntuaciones"
+            android:entries="@array/tiposPuntuacion"
+            android:entryValues="@array/tiposPuntuacionValores"
+            android:defaultValue="1"/>
     </PreferenceCategory>
 </PreferenceScreen>

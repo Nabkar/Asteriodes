@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 /*import android.preference.EditTextPreference;
 import android.preference.Preference;*/
 import android.media.MediaPlayer;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,17 +18,25 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+
 public class MainActivity extends AppCompatActivity {
     private Button bAcercaDe;
     private Button bSalir;
     private Button bJugar;
     private Button bConfiguracion;
-    public static AlmacenPuntuaciones almacen = new AlmacenPuntuacionesArray();
+    public static AlmacenPuntuaciones almacen;
     private TextView titulo;
+    static final int ACTIV_JUEGO = 0;
+    static final int ACTIV_PREFERENCIAS = 1;
 
     //MediaPlayer mp;
     private SharedPreferences pref;
     private boolean sonidos;
+
+    public static RequestQueue colaPeticiones;
+    public static ImageLoader lectorImagenes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +49,12 @@ public class MainActivity extends AppCompatActivity {
         titulo.startAnimation(giro);
 
         bJugar = (Button) findViewById(R.id.button01);
-        Animation aparicion = AnimationUtils.loadAnimation(this,R.anim.aparecer);
-        bJugar.startAnimation(aparicion);
+        //Animation aparicion = AnimationUtils.loadAnimation(this,R.anim.aparecer);
+       // bJugar.startAnimation(aparicion);
 
         bJugar = (Button) findViewById(R.id.button02);
-        Animation desplazamiento = AnimationUtils.loadAnimation(this,R.anim.desplazamiento_derecha);
-        bJugar.startAnimation(desplazamiento);
+        //Animation desplazamiento = AnimationUtils.loadAnimation(this,R.anim.desplazamiento_derecha);
+        //bJugar.startAnimation(desplazamiento);
 
         bAcercaDe = (Button) findViewById(R.id.button03);
         bAcercaDe.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +113,48 @@ public class MainActivity extends AppCompatActivity {
             sonidos = false;
         }
 
+        //Tipo de ALMACÉN DE PUNTUACIONES
+        int tipoPuntuacion = Integer.parseInt(pref.getString("puntuaciones", "1"));
+        if (tipoPuntuacion == 1) {
+            almacen = new AlmacenPuntuacionesPreferencias(this);
+        } else if (tipoPuntuacion == 2) {
+            almacen = new AlmacenPuntuacionesFicheroInterno(this);
+        } else if(tipoPuntuacion == 3) {
+            almacen = new AlmacenPuntuacionesFicheroExterno(this);
+        } else if(tipoPuntuacion == 4) {
+            almacen = new AlmacenPuntuacionesFicheroExtApl(this);
+        } else if(tipoPuntuacion == 5) {
+            almacen = new AlmacenPuntuacionesRecursoRaw(this);
+        } else if(tipoPuntuacion == 6) {
+            almacen = new AlmacenPuntuacionesRecursoAssets(this);
+        } else if(tipoPuntuacion == 7) {
+            almacen = new AlmacenPuntuacionesXML_SAX(this);
+        } else if(tipoPuntuacion == 8) {
+            almacen = new AlmacenPuntuacionesXML_DOM(this);
+        } else if(tipoPuntuacion == 9) {
+            almacen = new AlmacenPuntuacionesGson(this);
+        } else if(tipoPuntuacion == 10) {
+            almacen = new AlmacenPuntuacionesJSon();
+        } else if(tipoPuntuacion == 11) {
+            almacen = new AlmacenPuntuacionesSQLite(this);
+        } else if(tipoPuntuacion == 12) {
+            almacen = new AlmacenPuntuacionesSQLiteRel(this);
+        } else if(tipoPuntuacion == 13) {
+            almacen = new AlmacenPuntuacionesProvider(this);
+        } else if(tipoPuntuacion == 14) {
+            almacen = new AlmacenPuntuacionesSocket();
+        } else if(tipoPuntuacion == 15) {
+            almacen = new AlmacenPuntuacionesSW_PHP();
+        } else if(tipoPuntuacion == 16) {
+            almacen = new AlmacenPuntuacionesSW_PHP_Hosting();
+        } else {
+            almacen = new AlmacenPuntuacionesArray();
+        }
+
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().
+                permitNetwork().build());
+
+
         //Toast.makeText(this,"onCreate",Toast.LENGTH_SHORT).show();
     }
 
@@ -135,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show();
     }
     @Override
     protected void onResume() {
@@ -143,17 +194,17 @@ public class MainActivity extends AppCompatActivity {
         /*if (pref.getBoolean("sonidos", true)==true) {
             mp.start();
         }*/
-        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
     }
     @Override
     protected void onPause() {
-        Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
         //mp.pause();
         super.onPause();
     }
     @Override
     protected void onStop() {
-        Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
         super.onStop();
     }
     @Override
@@ -164,11 +215,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mp.stop();
         }*/
-        Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
     }
     @Override
     protected void onDestroy() {
-        Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
         stopService(new Intent(MainActivity.this,
                 ServicioMusica.class));
         super.onDestroy();
@@ -176,23 +227,82 @@ public class MainActivity extends AppCompatActivity {
 
     public void lanzarAcercaDe(View view){
         Intent i = new Intent(this, AcercaDeActivity.class);
+        stopService(new Intent(MainActivity.this,
+                ServicioMusica.class));
         startActivity(i);
     }
 
 
     public void lanzarPreferencias(View view){
         Intent i = new Intent(this, PreferenciasActivity.class);
-        startActivity(i);
+        stopService(new Intent(MainActivity.this,
+                ServicioMusica.class));
+        startActivityForResult(i,ACTIV_PREFERENCIAS);
     }
 
     public void lanzarPuntuaciones(View view){
         Intent i = new Intent(this, Puntuaciones.class);
+        stopService(new Intent(MainActivity.this,
+                ServicioMusica.class));
         startActivity(i);
     }
 
-    public void lanzarJuego(View view){
+    public void lanzarJuego(View view) {
         Intent i = new Intent(this, Juego.class);
-        startActivity(i);
+        stopService(new Intent(MainActivity.this,
+                ServicioMusica.class));
+        startActivityForResult(i, ACTIV_JUEGO);
+    }
+
+    @Override
+    protected void onActivityResult (int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode== ACTIV_JUEGO && resultCode==RESULT_OK && data!=null) {
+            int puntuacion = data.getExtras().getInt("puntuacion");
+            String nombre = "Yo";
+            // Mejor leer nombre desde un AlertDialog.Builder o preferencias
+            almacen.guardarPuntuacion(puntuacion, nombre,
+                    System.currentTimeMillis());
+            lanzarPuntuaciones(null);
+        }
+        if (requestCode== ACTIV_PREFERENCIAS && resultCode==RESULT_OK) {
+            int tipoPuntuacion = Integer.parseInt(pref.getString("puntuaciones", "1"));
+            if (tipoPuntuacion == 1) {
+                almacen = new AlmacenPuntuacionesPreferencias(this);
+            } else if (tipoPuntuacion == 2) {
+                almacen = new AlmacenPuntuacionesFicheroInterno(this);
+            } else if(tipoPuntuacion == 3) {
+                almacen = new AlmacenPuntuacionesFicheroExterno(this);
+            } else if(tipoPuntuacion == 4) {
+                almacen = new AlmacenPuntuacionesFicheroExtApl(this);
+            } else if(tipoPuntuacion == 5) {
+                almacen = new AlmacenPuntuacionesRecursoRaw(this);
+            } else if(tipoPuntuacion == 6) {
+                almacen = new AlmacenPuntuacionesRecursoAssets(this);
+            } else if(tipoPuntuacion == 7) {
+                almacen = new AlmacenPuntuacionesXML_SAX(this);
+            } else if(tipoPuntuacion == 8) {
+                almacen = new AlmacenPuntuacionesXML_DOM(this);
+            } else if(tipoPuntuacion == 9) {
+                almacen = new AlmacenPuntuacionesGson(this);
+            } else if(tipoPuntuacion == 10) {
+                almacen = new AlmacenPuntuacionesJSon();
+            } else if(tipoPuntuacion == 11) {
+                almacen = new AlmacenPuntuacionesSQLite(this);
+            } else if(tipoPuntuacion == 12) {
+                almacen = new AlmacenPuntuacionesSQLiteRel(this);
+            } else if(tipoPuntuacion == 13) {
+                almacen = new AlmacenPuntuacionesProvider(this);
+            } else if(tipoPuntuacion == 14) {
+                almacen = new AlmacenPuntuacionesSocket();
+            } else if(tipoPuntuacion == 15) {
+                almacen = new AlmacenPuntuacionesSW_PHP();
+            } else if(tipoPuntuacion == 16) {
+                almacen = new AlmacenPuntuacionesSW_PHP_Hosting();
+            } else {
+                almacen = new AlmacenPuntuacionesArray();
+            }
+        }
     }
 
     public void mostrarPreferencias(View view){

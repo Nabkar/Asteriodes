@@ -20,4 +20,43 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="tiposPuntuacion">
+        <item>Array</item>
+        <item>Preferencias</item>
+        <item>Fichero Interno</item>
+        <item>Fichero Externo</item>
+        <item>Fichero Externo Aplicación</item>
+        <item>Raw</item>
+        <item>Assets</item>
+        <item>XML_SAX</item>
+        <item>XML_DOM</item>
+        <item>Gson</item>
+        <item>Json</item>
+        <item>SQLite</item>
+        <item>SQLite Relacional</item>
+        <item>Provider</item>
+        <item>Servidor Puntuaciones</item>
+        <item>Servidor PHP</item>
+        <item>Servidor PHP Hosting</item>
+    </string-array>
+    <string-array name="tiposPuntuacionValores">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+    </string-array>
+
 </resources>

@@ -8,6 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -16,10 +20,10 @@ import java.util.Vector;
 
 public class MiAdaptador extends RecyclerView.Adapter<MiAdaptador.ViewHolder> {
     private LayoutInflater inflador;
-    private Vector<String> lista;
+    private List<String> lista;
     protected View.OnClickListener onClickListener;
 
-    public MiAdaptador(Context context, Vector<String> lista) {
+    public MiAdaptador(Context context, List<String> lista) {
         this.lista = lista;
         inflador = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -34,7 +38,8 @@ public class MiAdaptador extends RecyclerView.Adapter<MiAdaptador.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int i) {
         holder.titulo.setText(lista.get(i));
-        switch (Math.round((float)Math.random()*3)){
+        //Cargando las imagenes desde resources
+        /*switch (Math.round((float)Math.random()*3)){
             case 0:
                 holder.icon.setImageResource(R.drawable.asteroide1);
                 break;
@@ -44,20 +49,30 @@ public class MiAdaptador extends RecyclerView.Adapter<MiAdaptador.ViewHolder> {
             default:
                 holder.icon.setImageResource(R.drawable.asteroide3);
                 break;
-        }
+        }*/
+
+        //Cargando las imagenes desde Volley
+        /*MainActivity.lectorImagenes.get("http://mmoviles.upv.es/img/moviles.png",
+                ImageLoader.getImageListener(holder.icon, R.drawable.asteroide1,
+                        R.drawable.asteroide3));*/
+
+        // Cargando las imagenes con NetworkImageView
+        holder.icon.setImageUrl("http://mmoviles.upv.es/img/moviles.png",
+                MainActivity.lectorImagenes);
     }
     @Override
     public int getItemCount() {
         return lista.size();
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView titulo, subtitutlo;
-        public ImageView icon;
+        public NetworkImageView icon;
         ViewHolder(View itemView) {
             super(itemView);
             titulo = (TextView)itemView.findViewById(R.id.titulo);
             subtitutlo = (TextView)itemView.findViewById(R.id.subtitulo);
-            icon = (ImageView)itemView.findViewById(R.id.icono);
+            icon = (NetworkImageView)itemView.findViewById(R.id.icono);
         }
     }
 

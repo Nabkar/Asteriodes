@@ -5,7 +5,7 @@
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:paddingTop="4dp"
     android:paddingBottom="4dp">
-    <ImageView android:id="@+id/icono"
+    <com.android.volley.toolbox.NetworkImageView android:id="@+id/icono"
         android:layout_width="?android:attr/listPreferredItemHeight"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
